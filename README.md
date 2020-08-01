@@ -81,6 +81,7 @@ These samples are ported from [PostgreSQL Exercises](https://pgexercises.com/) t
 - [Work out the end time of bookings](/Exercises/WorkingWithTimestamps/WorkoutTheEndTimeOfBookings.cs)
 - [Return a count of bookings for each month](/Exercises/WorkingWithTimestamps/ReturnCountOfBookingsForEachMonth.cs)
 - [Work out the utilization percentage for each facility by month](/Exercises/WorkingWithTimestamps/WorkoutTheUtilisationPercentageForEachFacilityByMonth.cs)
+- [Find registered members in given months](/Exercises/WorkingWithTimestamps/FindRegisteredMembersInGivenMonths.cs)
 
 ## [String Operations](/Exercises/StringOperations)
 
