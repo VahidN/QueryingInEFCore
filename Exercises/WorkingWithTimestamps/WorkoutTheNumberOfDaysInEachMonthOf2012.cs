@@ -39,30 +39,20 @@ namespace EFCorePgExercises.Exercises.WorkingWithTimestamps
                                         booking.StartTime.Date.AddDays(1 - booking.StartTime.Date.Day).AddMonths(1)
                                         )
                     })
-                    .GroupBy(b => new { b.Year, b.Month, b.DaysInMonth })
-                    .Select(g => new
-                    {
-                        g.Key.Year,
-                        g.Key.Month,
-                        g.Key.DaysInMonth
-                    })
                     .Distinct()
                     .OrderBy(r => r.Year)
                         .ThenBy(r => r.Month)
                     .ToList();
                 /*
-                    SELECT [t].[c] AS [Year], [t].[c0] AS [Month], [t].[c1] AS [DaysInMonth]
-                        FROM (
-                            SELECT DISTINCT DATEPART(year, [b].[StartTime]) AS [c],
-                            DATEPART(month, [b].[StartTime]) AS [c0],
-                            DATEDIFF(DAY, DATEADD(day, CAST(CAST((1 - DATEPART(day, CONVERT(date, [b].[StartTime]))) AS float) AS int), CONVERT(date, [b].[StartTime])), DATEADD(month, CAST(1 AS int), DATEADD(day, CAST(CAST((1 - DATEPART(day, CONVERT(date, [b].[StartTime]))) AS float) AS int), CONVERT(date, [b].[StartTime])))) AS [c1]
-                            FROM [Bookings] AS [b]
-                            WHERE DATEPART(year, [b].[StartTime]) = 2012
-                            GROUP BY DATEPART(year, [b].[StartTime]),
-                            DATEPART(month, [b].[StartTime]),
-                            DATEDIFF(DAY, DATEADD(day, CAST(CAST((1 - DATEPART(day, CONVERT(date, [b].[StartTime]))) AS float) AS int), CONVERT(date, [b].[StartTime])), DATEADD(month, CAST(1 AS int), DATEADD(day, CAST(CAST((1 - DATEPART(day, CONVERT(date, [b].[StartTime]))) AS float) AS int), CONVERT(date, [b].[StartTime]))))
-                        ) AS [t]
-                        ORDER BY [t].[c], [t].[c0]
+                    SELECT   [t].[c] AS [Year],
+                            [t].[c0] AS [Month],
+                            [t].[c1] AS [DaysInMonth]
+                    FROM     (SELECT DISTINCT DATEPART(year, [b].[StartTime]) AS [c],
+                                            DATEPART(month, [b].[StartTime]) AS [c0],
+                                            DATEDIFF(DAY, DATEADD(day, CAST (CAST ((1 - DATEPART(day, CONVERT (DATE, [b].[StartTime]))) AS FLOAT) AS INT), CONVERT (DATE, [b].[StartTime])), DATEADD(month, CAST (1 AS INT), DATEADD(day, CAST (CAST ((1 - DATEPART(day, CONVERT (DATE, [b].[StartTime]))) AS FLOAT) AS INT), CONVERT (DATE, [b].[StartTime])))) AS [c1]
+                            FROM   [Bookings] AS [b]
+                            WHERE  DATEPART(year, [b].[StartTime]) = 2012) AS [t]
+                    ORDER BY [t].[c], [t].[c0];
                 */
 
                 var expectedResult = new[]
