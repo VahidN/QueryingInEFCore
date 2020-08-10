@@ -10,7 +10,7 @@ namespace EFCorePgExercises.Exercises.JoinsAndSubqueries
     public class ListOfFacilitiesWhichAreNotBookedIn2013
     {
         [FullyQualifiedTestMethod]
-        public void Test()
+        public void Test_Method1()
         {
             EFServiceProvider.RunInContext(context =>
             {
@@ -43,6 +43,56 @@ namespace EFCorePgExercises.Exercises.JoinsAndSubqueries
                             INNER JOIN [Facilities] AS [f0] ON [b].[FacId] = [f0].[FacId]
                             WHERE DATEPART(year, [b].[StartTime]) = 2013
                         )
+                */
+
+                string[] expectedResult =
+                {
+                    "Tennis Court 1",
+                    "Tennis Court 2",
+                    "Badminton Court",
+                    "Table Tennis",
+                    "Massage Room 1",
+                    "Massage Room 2",
+                    "Squash Court",
+                    "Snooker Table"
+                };
+
+                facilitiesNotBookedIn2013.Should().BeEquivalentTo(expectedResult);
+            });
+        }
+
+        [FullyQualifiedTestMethod]
+        public void Test_Method2()
+        {
+            EFServiceProvider.RunInContext(context =>
+            {
+                // The list of facilities which are not booked in 2013.
+                // Implement a conditional join clause.
+                //
+                //SELECT f.Name
+                //FROM   Facilities AS f
+                //       LEFT JOIN
+                //       Bookings AS b
+                //       ON f.FacId = b.FacId
+                //          AND YEAR(b.StartTime) = 2013
+                //WHERE  b.StartTime IS NULL;
+
+                var facilitiesNotBookedIn2013 =
+                        from facility in context.Facilities
+                        from booking in context.Bookings.Where(booking => booking.StartTime.Year == 2013 &&
+                                                                    booking.FacId == facility.FacId).DefaultIfEmpty()
+                        where booking.StartTime == null
+                        select facility.Name;
+
+                /*
+                    SELECT [f].[Name]
+                        FROM [Facilities] AS [f]
+                        LEFT JOIN (
+                            SELECT [b].[BookId], [b].[FacId], [b].[MemId], [b].[Slots], [b].[StartTime]
+                            FROM [Bookings] AS [b]
+                            WHERE DATEPART(year, [b].[StartTime]) = 2013
+                        ) AS [t] ON [f].[FacId] = [t].[FacId]
+                        WHERE [t].[StartTime] IS NULL
                 */
 
                 string[] expectedResult =
