@@ -85,6 +85,7 @@ These samples are ported from [PostgreSQL Exercises](https://pgexercises.com/) t
 - [Return a count of bookings for each month](/Exercises/WorkingWithTimestamps/ReturnCountOfBookingsForEachMonth.cs)
 - [Work out the utilization percentage for each facility by month](/Exercises/WorkingWithTimestamps/WorkoutTheUtilisationPercentageForEachFacilityByMonth.cs)
 - [Find registered members in given months](/Exercises/WorkingWithTimestamps/FindRegisteredMembersInGivenMonths.cs)
+- [Produce quarterly count of booked items in 2012 and 2013](/Exercises/WorkingWithTimestamps/QuarterlyCountOfBookedItemsIn2012And2013.cs)
 
 ## [String Operations](/Exercises/StringOperations)
 
