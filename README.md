@@ -20,6 +20,7 @@ These samples are ported from [PostgreSQL Exercises](https://pgexercises.com/) t
 - [Combining results from multiple queries](/Exercises/SimpleSQLQueries/CombiningResultsFromMultipleQueries.cs)
 - [Simple aggregation](/Exercises/SimpleSQLQueries/SimpleAggregation.cs)
 - [More aggregation](/Exercises/SimpleSQLQueries/MoreAggregation.cs)
+- [Produce a list of facilities that are booked only in 2012](/Exercises/SimpleSQLQueries/ListOfFacilitiesThatAreBookedOnlyIn2012.cs)
 
 ## [Joins and Sub-queries](/Exercises/JoinsAndSubqueries)
 
@@ -31,7 +32,7 @@ These samples are ported from [PostgreSQL Exercises](https://pgexercises.com/) t
 - [Produce a list of costly bookings](/Exercises/JoinsAndSubqueries/ProduceListOfCostlyBookings.cs)
 - [Produce a list of all members, along with their recommender, using no joins.](/Exercises/JoinsAndSubqueries/ProduceListOfAllMembersAlongWithTheirRecommenderUsingNoJoins.cs)
 - [Produce a list of costly bookings, using a sub-query](/Exercises/JoinsAndSubqueries/ProduceListOfCostlyBookingsUsingSubquery.cs)
-- [The list of facilities which are not booked in 2013](/Exercises/JoinsAndSubqueries/ListOfFacilitiesWhichAreNotBookedIn2013.cs)
+- [Produce a list of facilities which are not booked in 2013](/Exercises/JoinsAndSubqueries/ListOfFacilitiesWhichAreNotBookedIn2013.cs)
 
 ## [Modifying data](/Exercises/ModifyingData)
 
