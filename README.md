@@ -71,6 +71,7 @@ These samples are ported from [PostgreSQL Exercises](https://pgexercises.com/) t
 - [Calculate the payback time for each facility](/Exercises/Aggregation/CalculateThePaybackTimeForEachFacility.cs)
 - [Calculate a rolling average of total revenue](/Exercises/Aggregation/CalculateRollingAverageOfTotalRevenue.cs)
 - [Produce running total count of bookings for each year](/Exercises/Aggregation/RunningTotalCountOfBookingsForEachYear.cs)
+- [Bookings count per year and sales growth as compared with the previous year](/Exercises/Aggregation/BookingsCountPerYearAndSalesGrowthAsComparedWithPreviousYear.cs)
 
 ## [Working with Timestamps](/Exercises/WorkingWithTimestamps)
 

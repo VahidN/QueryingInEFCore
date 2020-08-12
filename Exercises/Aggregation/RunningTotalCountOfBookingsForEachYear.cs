@@ -2,6 +2,8 @@ using System.Linq;
 using EFCorePgExercises.DataLayer;
 using FluentAssertions;
 using EFCorePgExercises.Utils;
+using LinqToDB;
+using LinqToDB.EntityFrameworkCore;
 
 namespace EFCorePgExercises.Exercises.Aggregation
 {
@@ -9,7 +11,7 @@ namespace EFCorePgExercises.Exercises.Aggregation
     public class RunningTotalCountOfBookingsForEachYear
     {
         [FullyQualifiedTestMethod]
-        public void Test()
+        public void Test_Method1()
         {
             EFServiceProvider.RunInContext(context =>
             {
@@ -51,6 +53,56 @@ namespace EFCorePgExercises.Exercises.Aggregation
                 {
                     new { Year = 2012, SoldItemsCount = 4043 ,  RunningTotalCount = 4043 },
                     new { Year = 2013, SoldItemsCount = 1 ,  RunningTotalCount = 4044 }
+                };
+
+                runningTotalCountForEachYear.Should().BeEquivalentTo(expectedResult);
+            });
+        }
+
+        [FullyQualifiedTestMethod]
+        public void Test_Method2()
+        {
+            // Using
+            // https://github.com/linq2db/linq2db.EntityFrameworkCore
+            // https://github.com/linq2db/linq2db/wiki/Window-Functions-(Analytic-Functions)
+
+            EFServiceProvider.RunInContext(context =>
+            {
+                // Running total count of bookings for each year.
+                //
+                //SELECT DISTINCT YEAR(StartTime) AS [Year],
+                //                COUNT(StartTime) OVER (ORDER BY YEAR(StartTime)) AS RunningTotalCountOfBookings
+                //FROM   Bookings;
+
+                var runningTotalCountForEachYear = context.Bookings
+                                .Select(booking => new
+                                {
+                                    booking.StartTime.Year,
+                                    RunningTotalCount =
+                                        Sql.Ext.Count(booking.StartTime)
+                                                .Over()
+                                                .OrderBy(booking.StartTime.Year)
+                                                .ToValue()
+                                })
+                                .OrderBy(result => result.Year)
+                                .Distinct()
+                                .ToLinqToDB()
+                                .ToList();
+
+                /*
+                    SELECT DISTINCT
+                        DatePart(year, [booking].[StartTime]),
+                        COUNT([booking].[StartTime]) OVER(ORDER BY DatePart(year, [booking].[StartTime]))
+                    FROM
+                        [Bookings] [booking]
+                    ORDER BY
+                        DatePart(year, [booking].[StartTime])
+                */
+
+                var expectedResult = new[]
+                {
+                    new { Year = 2012, RunningTotalCount = 4043 },
+                    new { Year = 2013, RunningTotalCount = 4044 }
                 };
 
                 runningTotalCountForEachYear.Should().BeEquivalentTo(expectedResult);

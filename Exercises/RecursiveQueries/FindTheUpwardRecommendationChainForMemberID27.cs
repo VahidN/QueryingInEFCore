@@ -3,6 +3,9 @@ using EFCorePgExercises.DataLayer;
 using System.Collections.Generic;
 using FluentAssertions;
 using EFCorePgExercises.Utils;
+using Microsoft.EntityFrameworkCore;
+using LinqToDB;
+using LinqToDB.EntityFrameworkCore;
 
 namespace EFCorePgExercises.Exercises.RecursiveQueries
 {
@@ -10,7 +13,7 @@ namespace EFCorePgExercises.Exercises.RecursiveQueries
     public class FindTheUpwardRecommendationChainForMemberID27
     {
         [FullyQualifiedTestMethod]
-        public void Test()
+        public void Test_Method1()
         {
             // https://pgexercises.com/questions/recursive/getupward.html
             // Find the upward recommendation chain for member ID 27: that is, the member who recommended them,
@@ -67,6 +70,107 @@ namespace EFCorePgExercises.Exercises.RecursiveQueries
                 var actualResult = new List<dynamic>();
                 RecursiveUtils.FindParents(entity27WithAllOfItsParents, actualResult);
                 actualResult.Should().BeEquivalentTo(expectedResult);
+            });
+        }
+
+        [FullyQualifiedTestMethod]
+        public void Test_Method2()
+        {
+            // https://pgexercises.com/questions/recursive/getupward.html
+            // Find the upward recommendation chain for member ID 27: that is, the member who recommended them,
+            // and the member who recommended that member, and so on. Return member ID, first name,
+            // and surname. Order by descending member id.
+
+            // Using
+            // https://github.com/linq2db/linq2db.EntityFrameworkCore
+            // https://linq2db.github.io/articles/sql/CTE.html
+
+            EFServiceProvider.RunInContext(context =>
+            {
+                var memberHierarchyCte =
+                    context.CreateLinqToDbContext().GetCte<MemberHierarchyCTE>(memberHierarchy =>
+                    {
+                        return
+                            (
+                                from member in context.Members
+                                select new MemberHierarchyCTE
+                                {
+                                    ChildId = member.MemId,
+                                    ParentId = member.RecommendedBy
+                                }
+                            )
+                            .Concat
+                            (
+                                from member in context.Members
+                                from hierarchy in memberHierarchy
+                                            .InnerJoin(hierarchy => member.MemId == hierarchy.ParentId)
+                                select new MemberHierarchyCTE
+                                {
+                                    ChildId = hierarchy.ChildId,
+                                    ParentId = member.RecommendedBy
+                                }
+                            );
+                    });
+
+                var parentIdsQuery = memberHierarchyCte.Where(mh => mh.ChildId == 27 && mh.ParentId != null)
+                                                        .Select(mh => mh.ParentId);
+
+                var parents = context.Members.Where(member => parentIdsQuery.Contains(member.MemId))
+                                                .Select(member => new
+                                                {
+                                                    Recommender = member.MemId,
+                                                    member.FirstName,
+                                                    member.Surname
+                                                })
+                                                .OrderByDescending(result => result.Recommender)
+                                                .ToLinqToDB()
+                                                .ToList();
+
+                /*
+                        WITH [memberHierarchy] ([ChildId], [ParentId])
+                        AS
+                        (
+                            SELECT
+                                [member_1].[MemId],
+                                [member_1].[RecommendedBy]
+                            FROM
+                                [Members] [member_1]
+                            UNION ALL
+                            SELECT
+                                [hierarchy_1].[ChildId],
+                                [member_2].[RecommendedBy]
+                            FROM
+                                [Members] [member_2]
+                                    INNER JOIN [memberHierarchy] [hierarchy_1] ON [member_2].[MemId] = [hierarchy_1].[ParentId]
+                        )
+                        SELECT
+                            [member_3].[MemId],
+                            [member_3].[FirstName],
+                            [member_3].[Surname]
+                        FROM
+                            [Members] [member_3]
+                        WHERE
+                            EXISTS(
+                                SELECT
+                                    *
+                                FROM
+                                    [memberHierarchy] [mh]
+                                WHERE
+                                    [mh].[ChildId] = 27 AND [mh].[ParentId] IS NOT NULL AND
+                                    [mh].[ParentId] = [member_3].[MemId]
+                            )
+                        ORDER BY
+                            [member_3].[MemId] DESC
+                */
+
+                var expectedResult = new[]
+                {
+                    new { Recommender = 20, FirstName = "Matthew", Surname ="Genting" },
+                    new { Recommender = 5, FirstName = "Gerald", Surname ="Butters" },
+                    new { Recommender = 1, FirstName = "Darren", Surname ="Smith" }
+                };
+
+                parents.Should().BeEquivalentTo(expectedResult);
             });
         }
     }

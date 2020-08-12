@@ -12,6 +12,9 @@ namespace EFCorePgExercises
         public static void Initialize(TestContext context)
         {
             SeedData.Start();
+
+            LinqToDB.EntityFrameworkCore.LinqToDBForEFTools.Initialize();
+            LinqToDB.Data.DataConnection.TurnTraceSwitchOn();
         }
 
         [AssemblyCleanup]
