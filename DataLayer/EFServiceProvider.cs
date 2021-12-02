@@ -12,7 +12,7 @@ namespace EFCorePgExercises.DataLayer
     public static class EFServiceProvider
     {
         private static readonly Lazy<IServiceProvider> _serviceProviderBuilder =
-                new Lazy<IServiceProvider>(getServiceProvider, LazyThreadSafetyMode.ExecutionAndPublication);
+                new(getServiceProvider, LazyThreadSafetyMode.ExecutionAndPublication);
 
         /// <summary>
         /// A lazy loaded thread-safe singleton

@@ -90,7 +90,7 @@ namespace EFCorePgExercises.Utils
         private static readonly MethodInfo _sqlGetDateMethodInfo = typeof(SqlDbFunctionsExtensions)
             .GetRuntimeMethod(
                 nameof(SqlDbFunctionsExtensions.SqlGetDate),
-                new Type[] { }
+                Array.Empty<Type>()
             );
 
         public static DateTime SqlShortDate(DateTime Date)
@@ -117,14 +117,16 @@ namespace EFCorePgExercises.Utils
                 new[] { typeof(SqlDatePart), typeof(DateTime) }
             );
 
-
         public static void AddCustomSqlFunctions(this ModelBuilder modelBuilder)
         {
             modelBuilder.HasDbFunction(_sqlReplicateMethodInfo)
                 .HasTranslation(args =>
                 {
-                    return SqlFunctionExpression.Create("REPLICATE",
+                    return new SqlFunctionExpression(
+                        "REPLICATE",
                         args,
+                        nullable: true,
+                        args.Select((SqlExpression _) => false),
                         _sqlReplicateMethodInfo.ReturnType,
                         typeMapping: null);
                 });
@@ -132,44 +134,62 @@ namespace EFCorePgExercises.Utils
             modelBuilder.HasDbFunction(_sqlRoundMethodInfo)
                 .HasTranslation(args =>
                 {
-                    return SqlFunctionExpression.Create("ROUND",
+                    return new SqlFunctionExpression(
+                        "ROUND",
                         args,
+                        nullable: true,
+                        args.Select((SqlExpression _) => false),
                         _sqlRoundMethodInfo.ReturnType,
                         typeMapping: null);
                 });
 
             modelBuilder.HasDbFunction(_sqlDayMethodInfo)
-                .HasTranslation(args => SqlFunctionExpression.Create(
+                .HasTranslation(args =>
+                    new SqlFunctionExpression(
                     "DAY",
                     args,
+                    nullable: true,
+                    args.Select((SqlExpression _) => false),
                     _sqlDayMethodInfo.ReturnType,
                     typeMapping: null));
 
             modelBuilder.HasDbFunction(_sqlMonthMethodInfo)
-                .HasTranslation(args => SqlFunctionExpression.Create(
+                .HasTranslation(args =>
+                    new SqlFunctionExpression(
                     "MONTH",
                     args,
+                    nullable: true,
+                    args.Select((SqlExpression _) => false),
                     _sqlMonthMethodInfo.ReturnType,
                     typeMapping: null));
 
             modelBuilder.HasDbFunction(_sqlYearMethodInfo)
-                .HasTranslation(args => SqlFunctionExpression.Create(
+                .HasTranslation(args =>
+                    new SqlFunctionExpression(
                     "YEAR",
                     args,
+                    nullable: true,
+                    args.Select((SqlExpression _) => false),
                     _sqlYearMethodInfo.ReturnType,
                     typeMapping: null));
 
             modelBuilder.HasDbFunction(_sqlGetDateMethodInfo)
-                .HasTranslation(args => SqlFunctionExpression.Create(
+                .HasTranslation(args =>
+                    new SqlFunctionExpression(
                     "GETDATE",
                     args,
+                    nullable: true,
+                    args.Select((SqlExpression _) => false),
                     _sqlGetDateMethodInfo.ReturnType,
                     typeMapping: null));
 
             modelBuilder.HasDbFunction(_sqlShortDateMethodInfo)
-                .HasTranslation(args => SqlFunctionExpression.Create(
+                .HasTranslation(args =>
+                    new SqlFunctionExpression(
                     "DBO.SHORTDATE",
                     args,
+                    nullable: true,
+                    args.Select((SqlExpression _) => false),
                     _sqlShortDateMethodInfo.ReturnType,
                     typeMapping: null));
 
@@ -178,13 +198,17 @@ namespace EFCorePgExercises.Utils
                 {
                     var parameters = args.ToArray();
                     var param0 = ((SqlConstantExpression)parameters[0]).Value.ToString();
-                    return SqlFunctionExpression.Create("DATEDIFF",
-                        new[]
-                        {
+                    SqlExpression[] arguments = new[]
+                    {
                             new SqlFragmentExpression(param0), // It should be written as DateDiff(day, ...) and not DateDiff(N'day', ...) .
                             parameters[1],
                             parameters[2]
-                        },
+                    };
+                    return new SqlFunctionExpression(
+                        "DATEDIFF",
+                        arguments,
+                        nullable: true,
+                        arguments.Select((SqlExpression _) => false),
                         _sqlDateDiffMethodInfo.ReturnType,
                         typeMapping: null);
                 });
@@ -194,12 +218,16 @@ namespace EFCorePgExercises.Utils
                 {
                     var parameters = args.ToArray();
                     var param0 = ((SqlConstantExpression)parameters[0]).Value.ToString();
-                    return SqlFunctionExpression.Create("DATEPART",
-                        new[]
-                        {
-                            new SqlFragmentExpression(param0), // It should be written as DATEPART(day, ...) and not DATEPART(N'day', ...) .
-                            parameters[1]
-                        },
+                    SqlExpression[] arguments = new[]
+                    {
+                        new SqlFragmentExpression(param0), // It should be written as DATEPART(day, ...) and not DATEPART(N'day', ...) .
+                        parameters[1]
+                    };
+                    return new SqlFunctionExpression(
+                        "DATEPART",
+                        arguments,
+                        nullable: true,
+                        arguments.Select((SqlExpression _) => false),
                         _sqlDatePartMethodInfo.ReturnType,
                         typeMapping: null);
                 });

@@ -40,10 +40,10 @@ namespace EFCorePgExercises.Entities
 
             builder.Property(booking => booking.Slots).IsRequired();
 
-            builder.HasIndex(booking => new { booking.MemId, booking.FacId }).HasName("IX_memid_facid");
-            builder.HasIndex(booking => new { booking.FacId, booking.StartTime }).HasName("IX_facid_starttime");
-            builder.HasIndex(booking => new { booking.MemId, booking.StartTime }).HasName("IX_memid_starttime");
-            builder.HasIndex(booking => booking.StartTime).HasName("IX_starttime");
+            builder.HasIndex(booking => new { booking.MemId, booking.FacId }).HasDatabaseName("IX_memid_facid");
+            builder.HasIndex(booking => new { booking.FacId, booking.StartTime }).HasDatabaseName("IX_facid_starttime");
+            builder.HasIndex(booking => new { booking.MemId, booking.StartTime }).HasDatabaseName("IX_memid_starttime");
+            builder.HasIndex(booking => booking.StartTime).HasDatabaseName("IX_starttime");
         }
     }
 }

@@ -115,7 +115,6 @@ namespace EFCorePgExercises.Exercises.Aggregation
             //from DailyRevenue c1
             //order by c1.[date]
 
-
             EFServiceProvider.RunInContext(context =>
             {
                 var startDate = new DateTime(2012, 08, 1);

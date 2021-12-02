@@ -52,8 +52,8 @@ namespace EFCorePgExercises.Entities
 
             builder.Property(member => member.JoinDate).IsRequired();
 
-            builder.HasIndex(member => member.JoinDate).HasName("IX_JoinDate");
-            builder.HasIndex(member => member.RecommendedBy).HasName("IX_RecommendedBy");
+            builder.HasIndex(member => member.JoinDate).HasDatabaseName("IX_JoinDate");
+            builder.HasIndex(member => member.RecommendedBy).HasDatabaseName("IX_RecommendedBy");
         }
     }
 }
