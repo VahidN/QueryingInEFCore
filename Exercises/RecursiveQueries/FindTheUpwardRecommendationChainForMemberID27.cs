@@ -88,29 +88,29 @@ namespace EFCorePgExercises.Exercises.RecursiveQueries
             EFServiceProvider.RunInContext(context =>
             {
                 var memberHierarchyCte =
-                    context.CreateLinqToDbContext().GetCte<MemberHierarchyCTE>(memberHierarchy =>
-                    {
-                        return
-                            (
-                                from member in context.Members
-                                select new MemberHierarchyCTE
-                                {
-                                    ChildId = member.MemId,
-                                    ParentId = member.RecommendedBy
-                                }
-                            )
-                            .Concat
-                            (
-                                from member in context.Members
-                                from hierarchy in memberHierarchy
-                                            .InnerJoin(hierarchy => member.MemId == hierarchy.ParentId)
-                                select new MemberHierarchyCTE
-                                {
-                                    ChildId = hierarchy.ChildId,
-                                    ParentId = member.RecommendedBy
-                                }
-                            );
-                    });
+                    context.CreateLinqToDBContext().GetCte<MemberHierarchyCTE>(memberHierarchy =>
+                                                                               {
+                                                                                   return
+                                                                                       (
+                                                                                           from member in context.Members
+                                                                                           select new MemberHierarchyCTE
+                                                                                               {
+                                                                                                   ChildId = member.MemId,
+                                                                                                   ParentId = member.RecommendedBy
+                                                                                               }
+                                                                                       )
+                                                                                       .Concat
+                                                                                           (
+                                                                                            from member in context.Members
+                                                                                            from hierarchy in memberHierarchy
+                                                                                                .InnerJoin(hierarchy => member.MemId == hierarchy.ParentId)
+                                                                                            select new MemberHierarchyCTE
+                                                                                                {
+                                                                                                    ChildId = hierarchy.ChildId,
+                                                                                                    ParentId = member.RecommendedBy
+                                                                                                }
+                                                                                           );
+                                                                               });
 
                 var parentIdsQuery = memberHierarchyCte.Where(mh => mh.ChildId == 27 && mh.ParentId != null)
                                                         .Select(mh => mh.ParentId);

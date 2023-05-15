@@ -12,17 +12,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EFCorePgExercises.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20211202072003_V2021_12_02_1049")]
-    partial class V2021_12_02_1049
+    [Migration("20230515111819_V2023_05_15_1447")]
+    partial class V2023_05_15_1447
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("EFCorePgExercises.Entities.Booking", b =>
                 {
@@ -30,7 +31,7 @@ namespace EFCorePgExercises.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"), 0L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookId"), 0L);
 
                     b.Property<int>("FacId")
                         .HasColumnType("int");
@@ -67,19 +68,19 @@ namespace EFCorePgExercises.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FacId"), 0L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FacId"), 0L);
 
                     b.Property<decimal>("GuestCost")
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<decimal>("InitialOutlay")
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<decimal>("MemberCost")
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<decimal>("MonthlyMaintenance")
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(18, 6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -97,7 +98,7 @@ namespace EFCorePgExercises.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MemId"), 0L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MemId"), 0L);
 
                     b.Property<string>("Address")
                         .IsRequired()

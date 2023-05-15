@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EFCorePgExercises.Migrations
 {
-    public partial class V2021_12_02_1049 : Migration
+    /// <inheritdoc />
+    public partial class V2023_05_15_1447 : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -109,6 +111,7 @@ namespace EFCorePgExercises.Migrations
                 column: "RecommendedBy");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

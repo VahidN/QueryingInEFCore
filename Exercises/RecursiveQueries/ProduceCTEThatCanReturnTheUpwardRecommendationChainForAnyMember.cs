@@ -89,7 +89,7 @@ namespace EFCorePgExercises.Exercises.RecursiveQueries
             EFServiceProvider.RunInContext(context =>
             {
                 var memberHierarchyCte =
-                    context.CreateLinqToDbContext().GetCte<MemberHierarchyCTE>(memberHierarchy =>
+                    context.CreateLinqToDBContext().GetCte<MemberHierarchyCTE>(memberHierarchy =>
                     {
                         return
                             (
